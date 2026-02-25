@@ -13,3 +13,5 @@ class WindowInitializer:
         )
         self.pet.setAutoFillBackground(False)
         self.pet.setAttribute(Qt.WA_TranslucentBackground, True)
+        self.pet.resize(1024, 1024)
+        self.pet.show()
