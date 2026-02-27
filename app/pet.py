@@ -157,15 +157,16 @@ class DesktopPet(QWidget):
  
     def contextMenuEvent(self, event):
         menu = QMenu(self)
-        quitAction = menu.addAction("退出")
+        translateAction = menu.addAction("翻译")
         hide = menu.addAction("隐藏")
-        ot = menu.addAction("翻译")
+        quitAction = menu.addAction("退出")
+    
         action = menu.exec(self.mapToGlobal(event.pos()))
         if action == quitAction:
             qApp.quit()
         if action == hide:
             self.setWindowOpacity(0)
-        if action == ot:
+        if action == translateAction:
             self.showTranslateWindow()
  
  
