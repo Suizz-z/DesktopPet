@@ -128,13 +128,13 @@ class DesktopPet(QWidget):
         if event.button() == Qt.LeftButton:
             self.is_follow_mouse = True
             self.is_dragging = True
-        self.mouse_drag_pos = event.globalPos() - self.pos()
+        self.mouse_drag_pos = event.globalPosition().toPoint() - self.pos()
         event.accept()
         self.setCursor(QCursor(Qt.OpenHandCursor))
  
     def mouseMoveEvent(self, event):
         if Qt.LeftButton and self.is_follow_mouse:
-            self.move(event.globalPos() - self.mouse_drag_pos)
+            self.move(event.globalPosition().toPoint() - self.mouse_drag_pos)
         event.accept()
  
     def mouseReleaseEvent(self, event):
@@ -152,7 +152,7 @@ class DesktopPet(QWidget):
         menu = QMenu(self)
         quitAction = menu.addAction("退出")
         hide = menu.addAction("隐藏")
-        action = menu.exec_(self.mapToGlobal(event.pos()))
+        action = menu.exec(self.mapToGlobal(event.pos()))
         if action == quitAction:
             qApp.quit()
         if action == hide:
