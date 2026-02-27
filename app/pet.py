@@ -4,6 +4,7 @@ import random
 from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
+from utils.OT.main import FanYiWindow
 
 class DesktopPet(QWidget):
     def __init__(self, parent=None, **kwargs):
@@ -13,6 +14,7 @@ class DesktopPet(QWidget):
         self.initPetImage()
         self.is_dragging = False
         self.petNormalAction()
+        self.translate_window = None
  
  
     def init(self):
@@ -113,6 +115,11 @@ class DesktopPet(QWidget):
     def showwin(self):
         self.setWindowOpacity(1)
 
+    def showTranslateWindow(self):
+        if self.translate_window is None:
+            self.translate_window = FanYiWindow()
+        self.translate_window.show()
+
     def randomPosition(self):
         screen_geo = QApplication.primaryScreen().availableGeometry()
         pet_geo = self.geometry()
@@ -152,11 +159,14 @@ class DesktopPet(QWidget):
         menu = QMenu(self)
         quitAction = menu.addAction("退出")
         hide = menu.addAction("隐藏")
+        ot = menu.addAction("翻译")
         action = menu.exec(self.mapToGlobal(event.pos()))
         if action == quitAction:
             qApp.quit()
         if action == hide:
             self.setWindowOpacity(0)
+        if action == ot:
+            self.showTranslateWindow()
  
  
 if __name__ == '__main__':
