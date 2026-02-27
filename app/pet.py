@@ -5,6 +5,7 @@ from PySide6.QtWidgets import *
 from PySide6.QtGui import *
 from PySide6.QtCore import *
 from utils.OT.main import FanYiWindow
+from utils.CM.cm import CharacterManagement
 
 class DesktopPet(QWidget):
     def __init__(self, parent=None, **kwargs):
@@ -15,6 +16,7 @@ class DesktopPet(QWidget):
         self.is_dragging = False
         self.petNormalAction()
         self.translate_window = None
+        self.character_management_window = None
  
  
     def init(self):
@@ -120,6 +122,11 @@ class DesktopPet(QWidget):
             self.translate_window = FanYiWindow()
         self.translate_window.show()
 
+    def showCharacterManagementWindow(self):
+        if self.character_management_window is None:
+            self.character_management_window = CharacterManagement()
+        self.character_management_window.show()
+
     def randomPosition(self):
         screen_geo = QApplication.primaryScreen().availableGeometry()
         pet_geo = self.geometry()
@@ -157,6 +164,7 @@ class DesktopPet(QWidget):
  
     def contextMenuEvent(self, event):
         menu = QMenu(self)
+        characterManagementAction = menu.addAction("角色管理")
         translateAction = menu.addAction("翻译")
         hide = menu.addAction("隐藏")
         quitAction = menu.addAction("退出")
@@ -166,6 +174,8 @@ class DesktopPet(QWidget):
             qApp.quit()
         if action == hide:
             self.setWindowOpacity(0)
+        if action == characterManagementAction:
+            self.showCharacterManagementWindow()
         if action == translateAction:
             self.showTranslateWindow()
  

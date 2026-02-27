@@ -18,6 +18,8 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QGridLayout, QLabel, QPlainTextEdit,
     QPushButton, QSizePolicy, QTextEdit, QWidget)
 
+from qfluentwidgets import ImageLabel
+
 class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
@@ -81,7 +83,7 @@ class Ui_Form(object):
 
         self.gridLayout_2.addWidget(self.image, 3, 2, 1, 1)
 
-        self.roleImage = QLabel(Form)
+        self.roleImage = ImageLabel(Form)
         self.roleImage.setObjectName(u"roleImage")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
