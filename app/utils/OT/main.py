@@ -1,4 +1,5 @@
 from PySide6.QtWidgets import QApplication, QWidget
+from PySide6.QtCore import Qt
 from utils.OT.Ui_fanyi import Ui_Form
 from utils.OT.tools import translate,bind_target_lang,change_target_lang
 import requests
@@ -15,6 +16,11 @@ class FanYiWindow(QWidget, Ui_Form):
         self.zhRadioButton.clicked.connect(self.changeTargetLang)
         self.enRadioButton.clicked.connect(self.changeTargetLang)
         self.translateButton.clicked.connect(self.buttonTranslate)
+        self.setAttribute(Qt.WA_QuitOnClose, False)
+
+    def closeEvent(self, event):
+        event.ignore()
+        self.hide()
 
     def changeTargetLang(self):
         if self.autoRadioButton.isChecked():
