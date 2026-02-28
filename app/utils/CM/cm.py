@@ -12,7 +12,7 @@ class CharacterManagement(QWidget, Ui_Form):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.world_prompot = ""
+        self.world_prompt = ""
         self.pet_name = ""
 
         # 使用绝对路径加载图片
