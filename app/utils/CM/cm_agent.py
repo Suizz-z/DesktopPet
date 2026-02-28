@@ -1,6 +1,7 @@
 import os
 import sys
 from dotenv import load_dotenv
+import json
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '../../..'))
 
@@ -32,6 +33,7 @@ class CMAgent:
         self.pet_details = ""
         self.world_prompt = world_prompt
         self.world = ""
+        self.dialog = ""
         self.db = PetAIDB()
         self.doubaoLLM = DoubaoChatLLM()
         current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -41,6 +43,7 @@ class CMAgent:
         self.role_system_prompt = PromptTemplate.from_file(template_file=os.path.join(prompts_dir, "create_role_system_prompt.md"),encoding="utf-8").template
         self.role_user_prompt = PromptTemplate.from_file(template_file=os.path.join(prompts_dir, "create_role_user_prompt.md"),encoding="utf-8").template
         self.details_system_prompt = PromptTemplate.from_file(template_file=os.path.join(prompts_dir, "create_details_system_prompt.md"),encoding="utf-8").template
+        self.dialog_system_prompt = PromptTemplate.from_file(template_file=os.path.join(prompts_dir, "create_dialog_system_prompt.md"),encoding="utf-8").template
 
     def createWorldAgent(self):
         user_prompt = self.world_user_prompt.format(world_prompt=self.world_prompt)
@@ -63,7 +66,7 @@ class CMAgent:
             if chunk[0].content:
                 self.pet_story += chunk[0].content  
                 yield chunk[0].content
-    
+  
     def createPet(self):
         tools = []
         agent = create_agent(
@@ -73,8 +76,20 @@ class CMAgent:
             system_prompt=self.details_system_prompt,
         )
         self.pet_details = agent.invoke({"messages": [("user", f"桌宠故事：{self.pet_story}，世界设定：{self.world}")]})
+        return self.pet_details
 
-    
+    def createDialogAgent(self):
+
+        agent = create_agent(
+            model=self.doubaoLLM,
+            system_prompt=self.dialog_system_prompt,
+        )
+        self.dialog = agent.invoke({"messages": [("user", f"桌宠故事：{self.pet_story}，世界设定：{self.world},桌宠性格：{self.pet_details['structured_response']['pet_personality']},沟通风格：{self.pet_details['structured_response']['pet_speech_style']}")]})
+        dialog_content = self.dialog['messages'][-1].content
+        dialog_list = json.loads(dialog_content)
+        dialog_list_clean = [line.replace('\n', '') for line in dialog_list]
+        self.dialog_list = dialog_list_clean
+        return self.dialog_list
 
 if __name__ == "__main__":
     cm_agent = CMAgent("小明", "武侠世界")
@@ -88,3 +103,6 @@ if __name__ == "__main__":
     print("\n")
     cm_agent.createPet()
     print(cm_agent.pet_details['structured_response'])
+    print("\n")
+    dialog_list = cm_agent.createDialogAgent()
+    print(dialog_list)
