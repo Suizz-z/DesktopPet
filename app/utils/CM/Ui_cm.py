@@ -111,12 +111,14 @@ class Ui_Form(object):
         self.textWorld = QPlainTextEdit(Form)
         self.textWorld.setObjectName(u"textWorld")
         self.textWorld.setMaximumSize(QSize(200, 16777215))
+        self.textWorld.setReadOnly(True)
 
         self.gridLayout_2.addWidget(self.textWorld, 6, 0, 1, 1)
 
         self.textRole = QTextEdit(Form)
         self.textRole.setObjectName(u"textRole")
         self.textRole.setMaximumSize(QSize(200, 16777215))
+        self.textRole.setReadOnly(True)
 
         self.gridLayout_2.addWidget(self.textRole, 6, 1, 1, 1)
 
